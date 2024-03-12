@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { createClient } from 'contentful';
-import { ExperienceRoot, useFetchBySlug } from '@contentful/experience-builder';
+import { ExperienceRoot, useFetchBySlug } from '@contentful/experiences-sdk-react';
 
 interface ExperienceProps extends React.PropsWithChildren {}
 
@@ -14,7 +14,6 @@ const environment = process.env.NEXT_PUBLIC_CTFL_ENVIRONMENT!;
 const domain = process.env.NEXT_PUBLIC_CTFL_DOMAIN;
 const envExperienceTypeId = process.env.NEXT_PUBLIC_CTFL_EXPERIENCE_TYPE!;
 
-const mode = 'preview';
 const localeCode = 'en-US';
 
 const client = createClient({
@@ -29,7 +28,6 @@ const ExperienceClient: React.FC<ExperienceProps> = () => {
     client,
     slug: 'homePage',
     experienceTypeId: envExperienceTypeId,
-    mode,
     localeCode,
   });
   return <ExperienceRoot experience={experience} locale={localeCode} />;
