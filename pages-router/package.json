@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@contentful/experience-builder": "^4.0.0-alpha.22",
+    "@contentful/experience-builder-components": "^0.0.2-alpha.24",
+    "@contentful/experience-builder-visual-editor": "^0.0.2-alpha.24",
+    "@contentful/experiences-sdk-react": "^0.0.1-alpha.8",
     "contentful": "^10.6.21",
+    "i": "^0.3.7",
     "next": "14.1.0",
+    "npm": "^10.4.0",
     "react": "^18",
     "react-dom": "^18"
   },

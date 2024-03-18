@@ -3,38 +3,27 @@ import {
   fetchBySlug,
   ExperienceRoot,
   createExperience,
-} from '@contentful/experience-builder';
+} from '@contentful/experiences-sdk-react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 
 const accessToken = process.env.NEXT_PUBLIC_CTFL_ACCESS_TOKEN!;
-const previewToken = process.env.NEXT_PUBLIC_CTFL_PREVIEW_ACCESS_TOKEN!;
 const space = process.env.NEXT_PUBLIC_CTFL_SPACE!;
 const environment = process.env.NEXT_PUBLIC_CTFL_ENVIRONMENT!;
-const domain = process.env.NEXT_PUBLIC_CTFL_DOMAIN;
-const envExperienceTypeId = process.env.NEXT_PUBLIC_CTFL_EXPERIENCE_TYPE!;
-
-const mode = 'preview';
-const isPreview = mode === 'preview';
+const experienceTypeId = process.env.NEXT_PUBLIC_CTFL_EXPERIENCE_TYPE!;
 const localeCode = 'en-US';
-
-console.log('domain', domain);
 
 const client = createClient({
   space,
   environment,
-  host: isPreview ? `preview.${domain}` : `cdn.${domain}`,
-  accessToken: isPreview ? previewToken : accessToken,
+  accessToken,
 });
 
-//This page has issues with serializing experience object.
-// Presumably because of the use of Maps (and perhaps methods) in the EntityStore
-function SsrPage({
+function MyPage({
   experienceJSON,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log('TYPEOF: ', typeof experienceJSON);
-  // console.log('experienceJSON', experienceJSON)
+  //Recreate the experience object from the serialized JSON
   const experience = createExperience(experienceJSON);
-  console.log('experience', experience);
+
   return (
     <main style={{ width: '100%' }}>
       <ExperienceRoot experience={experience} locale={'en-US'} />
@@ -45,17 +34,19 @@ function SsrPage({
 export const getServerSideProps = async ({}: GetServerSidePropsContext) => {
   const experience = await fetchBySlug({
     client,
-    slug: 'homePage',
-    experienceTypeId: envExperienceTypeId,
-    mode,
+    slug: 'homePage', //could be fetched from the context
+    experienceTypeId,
     localeCode,
   });
 
+  //Serialize the experience manually
+  const experienceJSON = JSON.stringify(experience);
+
   return {
     props: {
-      experienceJSON: JSON.stringify(experience),
+      experienceJSON: experienceJSON,
     },
   };
 };
 
-export default SsrPage;
+export default MyPage;
