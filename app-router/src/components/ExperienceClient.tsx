@@ -19,7 +19,7 @@ const localeCode = 'en-US';
 const client = createClient({
   space,
   environment,
-  host: `https://api.${domain}`,
+  host: `cdn.${domain}`,
   accessToken,
 });
 

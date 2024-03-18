@@ -31,8 +31,6 @@ const client = createClient({
 function SsrPage({
   experienceJSON,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log('TYPEOF: ', typeof experienceJSON);
-  // console.log('experienceJSON', experienceJSON)
   const experience = createExperience(experienceJSON);
   console.log('experience', experience);
   return (
